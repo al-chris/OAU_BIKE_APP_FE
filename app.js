@@ -1020,6 +1020,97 @@ class OAUBikeApp {
     }
 }
 
+class OfflineManager {
+    constructor() {
+        this.isOnline = navigator.onLine;
+        this.setupEventListeners();
+    }
+    
+    setupEventListeners() {
+        window.addEventListener('online', () => {
+            this.isOnline = true;
+            this.handleOnline();
+        });
+        
+        window.addEventListener('offline', () => {
+            this.isOnline = false;
+            this.handleOffline();
+        });
+    }
+    
+    handleOnline() {
+        console.log('App is back online');
+        this.showToast('Connection restored - syncing data...', 'success');
+        this.forceSync();
+    }
+    
+    handleOffline() {
+        console.log('App is offline');
+        this.showToast('No internet connection - data will be stored locally', 'warning');
+    }
+    
+    async forceSync() {
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            try {
+                const messageChannel = new MessageChannel();
+                
+                messageChannel.port1.onmessage = (event) => {
+                    if (event.data.type === 'SYNC_COMPLETE') {
+                        if (event.data.success) {
+                            this.showToast('Data synchronized successfully', 'success');
+                        } else {
+                            this.showToast('Some data failed to sync', 'warning');
+                        }
+                    }
+                };
+                
+                navigator.serviceWorker.controller.postMessage(
+                    { type: 'FORCE_SYNC' },
+                    [messageChannel.port2]
+                );
+                
+            } catch (error) {
+                console.error('Failed to force sync:', error);
+            }
+        }
+    }
+    
+    async getSyncStatus() {
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            try {
+                const messageChannel = new MessageChannel();
+                
+                return new Promise((resolve) => {
+                    messageChannel.port1.onmessage = (event) => {
+                        if (event.data.type === 'SYNC_STATUS') {
+                            resolve(event.data);
+                        }
+                    };
+                    
+                    navigator.serviceWorker.controller.postMessage(
+                        { type: 'GET_SYNC_STATUS' },
+                        [messageChannel.port2]
+                    );
+                });
+                
+            } catch (error) {
+                console.error('Failed to get sync status:', error);
+                return { isOnline: this.isOnline, dbInitialized: false };
+            }
+        }
+        
+        return { isOnline: this.isOnline, dbInitialized: false };
+    }
+    
+    showToast(message, type) {
+        // Use your existing toast notification system
+        if (window.app && window.app.showToast) {
+            window.app.showToast(message, type);
+        }
+    }
+}
+
+
 // Initialize app when page loads
 let app;
 
@@ -1029,3 +1120,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export for global access
 window.OAUBikeApp = OAUBikeApp;
+
+// Initialize offline manager
+const offlineManager = new OfflineManager();
