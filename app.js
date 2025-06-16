@@ -13,8 +13,8 @@ class OAUBikeApp {
         
         // Configuration
         this.config = {
-            apiBaseUrl: 'http://localhost:80/api',
-            wsBaseUrl: 'ws://localhost:80/ws',
+            apiBaseUrl: 'https://oau-bike-app.onrender.com/api',
+            wsBaseUrl: 'ws://oau-bike-app.onrender.com/ws',
             oauCenter: [7.5227, 4.5198], // [lat, lng] for Leaflet
             campusRadius: 5000, // meters
             updateInterval: 30000, // 30 seconds
