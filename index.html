@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAU Campus Bike Visibility App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2E7D32">
+    <!-- Favicon links for various platforms and sizes -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./favicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./favicon/android-chrome-512x512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
+    <link rel="shortcut icon" href="/favicon/favicon.ico">
+</head>
+<body>
+    <!-- Safety Disclaimer Modal -->
+    <div id="disclaimerModal" class="modal active">
+        <div class="modal-content">
+            <div class="disclaimer-header">
+                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                <h2>SAFETY FIRST</h2>
+            </div>
+            <div class="disclaimer-content">
+                <div class="warning-box">
+                    <p><strong>⚠️ IMPORTANT SAFETY NOTICE:</strong></p>
+                    <ul>
+                        <li>This app provides location visibility ONLY</li>
+                        <li>NO ride matching or booking services</li>
+                        <li>Users are 100% responsible for their safety</li>
+                        <li>Always verify driver identity and bike condition</li>
+                        <li>Trust your instincts - if something feels wrong, don't proceed</li>
+                    </ul>
+                </div>
+                <div class="liability-box">
+                    <p><strong>LIABILITY:</strong></p>
+                    <p>OAU Campus Bike Visibility App provides information only. Not responsible for any incidents during transportation. Users participate at their own risk.</p>
+                </div>
+            </div>
+            <button id="acceptDisclaimer" class="btn btn-primary">
+                <i class="fas fa-check"></i> I Understand and Accept
+            </button>
+        </div>
+    </div>
+
+    <!-- Role Selection Modal -->
+    <div id="roleModal" class="modal">
+        <div class="modal-content">
+            <div class="role-header">
+                <i class="fas fa-user-circle"></i>
+                <h2>Select Your Role</h2>
+                <p>Are you a passenger or driver today?</p>
+            </div>
+            <div class="role-selection">
+                <button id="selectPassenger" class="role-btn">
+                    <i class="fas fa-user"></i>
+                    <span>Passenger</span>
+                    <small>Looking for a ride</small>
+                </button>
+                <button id="selectDriver" class="role-btn">
+                    <i class="fas fa-motorcycle"></i>
+                    <span>Driver</span>
+                    <small>Available for rides</small>
+                </button>
+            </div>
+            <div class="remember-choice">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="rememberRole">
+                    <span class="checkmark"></span>
+                    Remember my choice
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="appContainer" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="app-title">OAU Bike Visibility</h1>
+                    <div class="status-indicator">
+                        <span class="status-dot" id="connectionStatus"></span>
+                        <span class="status-text" id="statusText">Connecting...</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button id="roleToggle" class="role-toggle" title="Switch Role">
+                        <i class="fas fa-user" id="roleIcon"></i>
+                        <span id="currentRole">Passenger</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Map Container -->
+        <div class="map-container">
+            <div id="map" class="map"></div>
+            
+            <!-- Map Controls -->
+            <div class="map-controls">
+                <button id="centerMap" class="map-control-btn" title="Center on Campus">
+                    <i class="fas fa-crosshairs"></i>
+                </button>
+                <button id="myLocation" class="map-control-btn" title="My Location">
+                    <i class="fas fa-location-arrow"></i>
+                </button>
+            </div>
+
+            <!-- Legend -->
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-dot driver"></span>
+                    <span>Available Drivers</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot passenger"></span>
+                    <span>Waiting Passengers</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Panel -->
+        <div class="bottom-panel">
+            <!-- Bike Availability Reporter -->
+            <div class="panel-section">
+                <h3>Report Bike Availability</h3>
+                <div class="availability-buttons">
+                    <button class="availability-btn high" data-level="high">
+                        <i class="fas fa-bicycle"></i>
+                        <span>High</span>
+                    </button>
+                    <button class="availability-btn medium" data-level="medium">
+                        <i class="fas fa-bicycle"></i>
+                        <span>Medium</span>
+                    </button>
+                    <button class="availability-btn low" data-level="low">
+                        <i class="fas fa-bicycle"></i>
+                        <span>Low</span>
+                    </button>
+                    <button class="availability-btn none" data-level="none">
+                        <i class="fas fa-ban"></i>
+                        <span>None</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Campus Info -->
+            <div class="panel-section">
+                <h3>Your Location</h3>
+                <div class="location-info">
+                    <p id="currentLocation">Getting your location...</p>
+                    <p id="nearestLandmark" class="landmark-text"></p>
+                </div>
+            </div>
+
+            <!-- Activity Summary -->
+            <div class="panel-section">
+                <h3>Campus Activity</h3>
+                <div class="activity-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="driversCount">0</span>
+                        <span class="stat-label">Drivers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="passengersCount">0</span>
+                        <span class="stat-label">Passengers</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="activeUsers">0</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Panic Button (Always Visible) -->
+        <button id="panicButton" class="panic-button" title="Emergency Alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>EMERGENCY</span>
+        </button>
+
+        <!-- Settings Button -->
+        <button id="settingsButton" class="settings-button" title="Settings">
+            <i class="fas fa-cog"></i>
+        </button>
+    </div>
+
+    <!-- Emergency Confirmation Modal -->
+    <div id="emergencyModal" class="modal">
+        <div class="modal-content emergency-modal">
+            <div class="emergency-header">
+                <i class="fas fa-exclamation-triangle emergency-icon"></i>
+                <h2>EMERGENCY ALERT</h2>
+                <p>This will immediately notify campus security and your emergency contacts</p>
+            </div>
+            <div class="emergency-options">
+                <button id="confirmEmergency" class="btn btn-emergency">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Confirm Emergency
+                </button>
+                <button id="cancelEmergency" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button id="closeSettings" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <label for="emergencyContact">Emergency Contact</label>
+                    <input type="tel" id="emergencyContact" placeholder="+234XXXXXXXXX">
+                    <small>Optional: Contact to be notified in emergencies</small>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="locationSharing" checked>
+                        Share my location
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>
+                        <input type="checkbox" id="notifications" checked>
+                        Enable notifications
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <button id="endSession" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i>
+                        End Session
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading OAU Campus Map...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script> -->
+     <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="app.js"></script>
+</body>
+</html>

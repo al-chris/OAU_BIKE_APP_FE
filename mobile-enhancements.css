@@ -1,0 +1,145 @@
+/* Additional mobile-specific enhancements */
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+    .availability-btn,
+    .role-btn,
+    .map-control-btn,
+    .btn {
+        min-height: 48px;
+        min-width: 48px;
+    }
+    
+    .role-toggle {
+        min-height: 44px;
+        padding: 12px 16px;
+    }
+    
+    /* Larger touch targets */
+    .panic-button {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .settings-button {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+/* iOS specific adjustments */
+@supports (-webkit-touch-callout: none) {
+    .app-container {
+        height: 100vh;
+        height: -webkit-fill-available;
+    }
+    
+    .modal {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .panic-button {
+        bottom: calc(var(--spacing-xl) + env(safe-area-inset-bottom));
+    }
+}
+
+/* Android specific adjustments */
+@media screen and (display-mode: standalone) {
+    .app-header {
+        padding-top: max(var(--spacing-md), env(safe-area-inset-top));
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (orientation: landscape) and (max-height: 600px) {
+    .bottom-panel {
+        max-height: 30vh;
+    }
+    
+    .panic-button {
+        width: 60px;
+        height: 60px;
+        bottom: var(--spacing-md);
+    }
+    
+    .availability-buttons {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .legend-dot,
+    .status-dot {
+        border: 0.5px solid rgba(255,255,255,0.2);
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .loading-spinner {
+        animation: none;
+    }
+    
+    .panic-button {
+        transition: none;
+    }
+    
+    .modal,
+    .modal-content,
+    .toast {
+        transition: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-gray: #121212;
+        --light-gray: #2C2C2C;
+        --medium-gray: #AAAAAA;
+        --dark-gray: #FFFFFF;
+    }
+    
+    body {
+        background-color: var(--background-gray);
+        color: var(--dark-gray);
+    }
+    
+    .modal-content,
+    .bottom-panel,
+    .map-legend,
+    .map-control-btn {
+        background: #1E1E1E;
+        color: var(--dark-gray);
+    }
+    
+    .location-info,
+    .stat-item {
+        background: var(--light-gray);
+    }
+    
+    .availability-btn,
+    .role-btn {
+        background: #1E1E1E;
+        color: var(--dark-gray);
+    }
+}
+
+/* Print styles (for emergency contacts) */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    .emergency-confirmation,
+    .emergency-confirmation * {
+        visibility: visible;
+    }
+    
+    .emergency-confirmation {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+}

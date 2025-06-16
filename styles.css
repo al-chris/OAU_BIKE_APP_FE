@@ -1,0 +1,1098 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Brand Colors */
+    --campus-green: #2E7D32;
+    --safety-blue: #0277BD;
+    --caution-amber: #FF8F00;
+    --emergency-red: #C62828;
+    --dark-gray: #424242;
+    --medium-gray: #757575;
+    --light-gray: #EEEEEE;
+    --background-gray: #FAFAFA;
+    
+    /* Typography */
+    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-size-small: 12px;
+    --font-size-normal: 14px;
+    --font-size-medium: 16px;
+    --font-size-large: 18px;
+    --font-size-xl: 24px;
+    
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* Shadows */
+    --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-medium: 0 4px 8px rgba(0,0,0,0.15);
+    --shadow-heavy: 0 8px 16px rgba(0,0,0,0.2);
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-normal);
+    color: var(--dark-gray);
+    background-color: var(--background-gray);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* App Container */
+.app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header */
+.app-header {
+    background: var(--campus-green);
+    color: white;
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-medium);
+    z-index: 10;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.app-title {
+    font-size: var(--font-size-large);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-small);
+    opacity: 0.9;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--caution-amber);
+}
+
+.status-dot.connected {
+    background: #4CAF50;
+}
+
+.status-dot.disconnected {
+    background: var(--emergency-red);
+}
+
+.role-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-small);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.role-toggle:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+/* Map Container */
+.map-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+}
+
+.map-controls {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.map-control-btn {
+    width: 44px;
+    height: 44px;
+    background: white;
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-gray);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.map-control-btn:hover {
+    background: var(--light-gray);
+    transform: translateY(-1px);
+}
+
+.map-legend {
+    position: absolute;
+    bottom: var(--spacing-md);
+    left: var(--spacing-md);
+    background: white;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-medium);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-small);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-dot.driver {
+    background: var(--campus-green);
+}
+
+.legend-dot.passenger {
+    background: var(--emergency-red);
+}
+
+/* Bottom Panel */
+.bottom-panel {
+    background: white;
+    border-top: 1px solid var(--light-gray);
+    max-height: 40vh;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+    box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+}
+
+.panel-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.panel-section:last-child {
+    margin-bottom: 0;
+}
+
+.panel-section h3 {
+    font-size: var(--font-size-medium);
+    font-weight: 500;
+    color: var(--dark-gray);
+    margin-bottom: var(--spacing-md);
+}
+
+.availability-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+}
+
+.availability-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md) var(--spacing-sm);
+    border: 2px solid var(--light-gray);
+    background: white;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: var(--font-size-small);
+}
+
+.availability-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-light);
+}
+
+.availability-btn.high {
+    border-color: var(--campus-green);
+    color: var(--campus-green);
+}
+
+.availability-btn.medium {
+    border-color: var(--caution-amber);
+    color: var(--caution-amber);
+}
+
+.availability-btn.low {
+    border-color: var(--emergency-red);
+    color: var(--emergency-red);
+}
+
+.availability-btn.none {
+    border-color: var(--medium-gray);
+    color: var(--medium-gray);
+}
+
+.availability-btn.active {
+    background: currentColor;
+    color: white;
+}
+
+.location-info {
+    background: var(--light-gray);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+}
+
+.landmark-text {
+    font-size: var(--font-size-small);
+    color: var(--medium-gray);
+    margin-top: var(--spacing-xs);
+}
+
+.activity-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+}
+
+.stat-item {
+    text-align: center;
+    padding: var(--spacing-md);
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+}
+
+.stat-number {
+    display: block;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--safety-blue);
+}
+
+.stat-label {
+    font-size: var(--font-size-small);
+    color: var(--medium-gray);
+}
+
+/* Emergency Panic Button */
+.panic-button {
+    position: fixed;
+    bottom: var(--spacing-xl);
+    right: var(--spacing-md);
+    width: 80px;
+    height: 80px;
+    background: var(--emergency-red);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: var(--shadow-heavy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: var(--font-size-small);
+    z-index: 1000;
+    transition: all 0.2s ease;
+}
+
+.panic-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(198, 40, 40, 0.4);
+}
+
+.panic-button i {
+    font-size: var(--font-size-large);
+}
+
+/* Settings Button */
+.settings-button {
+    position: fixed;
+    top: 50%;
+    right: var(--spacing-md);
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    background: var(--safety-blue);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: var(--shadow-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.2s ease;
+}
+
+.settings-button:hover {
+    background: #0288D1;
+    transform: translateY(-50%) scale(1.05);
+}
+
+/* Modals */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: var(--spacing-md);
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-heavy);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+/* Disclaimer Modal */
+.disclaimer-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.warning-icon {
+    font-size: 48px;
+    color: var(--caution-amber);
+    margin-bottom: var(--spacing-md);
+}
+
+.disclaimer-header h2 {
+    font-size: var(--font-size-xl);
+    color: var(--emergency-red);
+    font-weight: 700;
+}
+
+.warning-box {
+    background: #FFF3E0;
+    border: 2px solid var(--caution-amber);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.warning-box ul {
+    margin-left: var(--spacing-md);
+    margin-top: var(--spacing-sm);
+}
+
+.warning-box li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.liability-box {
+    background: #FFEBEE;
+    border: 2px solid var(--emergency-red);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Role Selection Modal */
+.role-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.role-header i {
+    font-size: 48px;
+    color: var(--safety-blue);
+    margin-bottom: var(--spacing-md);
+}
+
+.role-selection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.role-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    border: 2px solid var(--light-gray);
+    background: white;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.role-btn:hover {
+    border-color: var(--safety-blue);
+    background: #F3F9FF;
+}
+
+.role-btn i {
+    font-size: var(--font-size-xl);
+    color: var(--safety-blue);
+}
+
+.role-btn span {
+    font-weight: 500;
+    font-size: var(--font-size-medium);
+}
+
+.role-btn small {
+    color: var(--medium-gray);
+    font-size: var(--font-size-small);
+}
+
+.remember-choice {
+    text-align: center;
+}
+
+.checkbox-container {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    font-size: var(--font-size-small);
+}
+
+.checkbox-container input {
+    display: none;
+}
+
+.checkmark {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--medium-gray);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.checkbox-container input:checked + .checkmark {
+    background: var(--safety-blue);
+    border-color: var(--safety-blue);
+}
+
+.checkbox-container input:checked + .checkmark::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Emergency Modal */
+.emergency-modal {
+    border: 3px solid var(--emergency-red);
+}
+
+.emergency-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.emergency-icon {
+    font-size: 48px;
+    color: var(--emergency-red);
+    margin-bottom: var(--spacing-md);
+}
+
+.emergency-header h2 {
+    color: var(--emergency-red);
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+}
+
+.emergency-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* Settings Modal */
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.close-btn {
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--medium-gray);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: var(--light-gray);
+    color: var(--dark-gray);
+}
+
+.setting-item {
+    margin-bottom: var(--spacing-lg);
+}
+
+.setting-item label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: var(--spacing-sm);
+}
+
+.setting-item input[type="tel"] {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 2px solid var(--light-gray);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-normal);
+    transition: border-color 0.2s ease;
+}
+
+.setting-item input[type="tel"]:focus {
+    outline: none;
+    border-color: var(--safety-blue);
+}
+
+.setting-item small {
+    color: var(--medium-gray);
+    font-size: var(--font-size-small);
+    margin-top: var(--spacing-xs);
+    display: block;
+}
+
+.setting-item input[type="checkbox"] {
+    margin-right: var(--spacing-sm);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-normal);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    min-height: 44px;
+}
+
+.btn-primary {
+    background: var(--safety-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0288D1;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: var(--medium-gray);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: var(--dark-gray);
+}
+
+.btn-emergency {
+    background: var(--emergency-red);
+    color: white;
+}
+
+.btn-emergency:hover {
+    background: #D32F2F;
+    transform: translateY(-1px);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background-gray);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s ease;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--light-gray);
+    border-top: 4px solid var(--safety-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.toast {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-medium);
+    max-width: 300px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    border-left: 4px solid var(--safety-blue);
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast.success {
+    border-left-color: var(--campus-green);
+}
+
+.toast.warning {
+    border-left-color: var(--caution-amber);
+}
+
+.toast.error {
+    border-left-color: var(--emergency-red);
+}
+
+/* Additional styles for Leaflet integration */
+
+/* Leaflet map container */
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+    font-family: var(--font-family);
+}
+
+/* Custom Leaflet controls styling */
+.leaflet-control-container .leaflet-routing-container-hide {
+    display: none;
+}
+
+.leaflet-control-zoom {
+    display: none; /* We'll use custom controls */
+}
+
+/* Custom map controls to match our design */
+.map-controls {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    z-index: 1000;
+}
+
+.map-control-btn {
+    width: 44px;
+    height: 44px;
+    background: white;
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-gray);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 16px;
+}
+
+.map-control-btn:hover {
+    background: var(--light-gray);
+    transform: translateY(-1px);
+}
+
+/* Custom popup styling */
+.leaflet-popup-content-wrapper {
+    border-radius: var(--radius-md);
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+.leaflet-popup-content {
+    margin: var(--spacing-md);
+    line-height: 1.4;
+    font-size: var(--font-size-small);
+}
+
+.leaflet-popup-tip {
+    background: white;
+}
+
+/* Campus boundary styling */
+.campus-boundary {
+    fill: rgba(46, 125, 50, 0.1);
+    stroke: #2E7D32;
+    stroke-width: 2;
+    stroke-dasharray: 5,5;
+}
+
+/* Marker clusters if needed */
+.marker-cluster {
+    background-color: rgba(46, 125, 50, 0.8);
+    border-radius: 50%;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid white;
+}
+
+.marker-cluster-small {
+    width: 30px;
+    height: 30px;
+    line-height: 26px;
+    font-size: 12px;
+}
+
+.marker-cluster-medium {
+    width: 40px;
+    height: 40px;
+    line-height: 36px;
+    font-size: 14px;
+}
+
+.marker-cluster-large {
+    width: 50px;
+    height: 50px;
+    line-height: 46px;
+    font-size: 16px;
+}
+
+/* Pulse animation for emergency markers */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Custom marker styles */
+.landmark-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.user-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.other-user-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.emergency-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Leaflet popup customization */
+.leaflet-popup-content-wrapper {
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-medium);
+}
+
+.leaflet-popup-tip {
+    background: white;
+    box-shadow: none;
+}
+
+.leaflet-popup-close-button {
+    color: var(--medium-gray) !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+}
+
+.leaflet-popup-close-button:hover {
+    color: var(--dark-gray) !important;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .app-header {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    .app-title {
+        font-size: var(--font-size-medium);
+    }
+    
+    .header-content {
+        gap: var(--spacing-sm);
+    }
+    
+    .role-toggle {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 12px;
+    }
+    
+    .role-toggle span {
+        display: none;
+    }
+    
+    .map-controls {
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+    }
+    
+    .map-legend {
+        bottom: var(--spacing-sm);
+        left: var(--spacing-sm);
+        padding: var(--spacing-sm);
+    }
+    
+    .bottom-panel {
+        max-height: 50vh;
+    }
+    
+    .availability-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .activity-stats {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .panic-button {
+        width: 60px;
+        height: 60px;
+        bottom: var(--spacing-lg);
+        right: var(--spacing-sm);
+    }
+    
+    .panic-button span {
+        font-size: 10px;
+    }
+    
+    .role-selection {
+        grid-template-columns: 1fr;
+    }
+    
+    .emergency-options {
+        gap: var(--spacing-sm);
+    }
+    
+    .toast-container {
+        top: var(--spacing-sm);
+        right: var(--spacing-sm);
+        left: var(--spacing-sm);
+    }
+    
+    .toast {
+        max-width: none;
+    }
+
+    .leaflet-control-attribution {
+        font-size: 10px;
+        background: rgba(255, 255, 255, 0.8);
+    }
+    
+    .leaflet-popup-content {
+        margin: var(--spacing-sm);
+    }
+
+    .leaflet-control-attribution {
+        font-size: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 2px 4px;
+    }
+    
+    .leaflet-popup-content {
+        margin: 8px 12px;
+        line-height: 1.3;
+        font-size: 13px;
+    }
+    
+    .leaflet-popup-content-wrapper {
+        border-radius: var(--radius-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .modal {
+        padding: var(--spacing-sm);
+    }
+    
+    .modal-content {
+        padding: var(--spacing-lg);
+    }
+    
+    .panic-button {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .panic-button i {
+        font-size: var(--font-size-medium);
+    }
+    
+    .panic-button span {
+        font-size: 8px;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus states for keyboard navigation */
+button:focus,
+input:focus,
+select:focus {
+    outline: 2px solid var(--safety-blue);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --light-gray: #CCCCCC;
+        --medium-gray: #666666;
+    }
+}
+
+/* Dark mode support for Leaflet */
+@media (prefers-color-scheme: dark) {
+    .leaflet-popup-content-wrapper {
+        background: #1E1E1E;
+        color: white;
+    }
+    
+    .leaflet-popup-tip {
+        background: #1E1E1E;
+    }
+    
+    .leaflet-control-attribution {
+        background: rgba(30, 30, 30, 0.8);
+        color: white;
+    }
+    
+    .leaflet-control-attribution a {
+        color: #64B5F6;
+    }
+}
